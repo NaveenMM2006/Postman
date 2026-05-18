@@ -29,43 +29,19 @@ export default function CollectionSidebar() {
   }, []);
 
   return (
-    <div className="w-72 border-r h-screen p-4 overflow-auto">
-
-      <h2 className="font-bold text-lg mb-4">
-        Saved Requests
-      </h2>
-
-      <div className="space-y-2">
-
+    <div className="w-full max-w-sm md:w-72 border-r md:border-r border-slate-800 h-screen p-4 overflow-auto bg-slate-950 text-slate-100">
+      <h2 className="font-semibold text-lg mb-4">Saved Requests</h2>
+      <div className="space-y-3">
         {requests.map((request) => (
-
           <div
             key={request.id}
-
-            onClick={() =>
-              loadRequest(request)
-            }
-
-            className="
-              border
-              rounded
-              p-2
-              cursor-pointer
-              hover:bg-gray-100
-            "
+            onClick={() => loadRequest(request)}
+            className="border border-slate-700 rounded-2xl p-3 cursor-pointer bg-slate-900 transition hover:bg-slate-800"
           >
-            <p className="font-medium truncate">
-              {request.name}
-            </p>
-
-            <p className="text-sm text-gray-500">
-              {request.method}
-            </p>
-
+            <p className="font-medium truncate">{request.name}</p>
+            <p className="text-sm text-slate-400">{request.method}</p>
           </div>
-
         ))}
-
       </div>
       <EnvironmentPanel />
     </div>

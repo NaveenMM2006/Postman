@@ -35,84 +35,35 @@ export default function RequestTabs() {
   }
 
   return (
-    <div className="
-      flex
-      items-center
-      border-b
-      overflow-x-auto
-      bg-gray-500
-      text-gray-900
-      font-bold
-    ">
-
+    <div className="flex items-center border-b border-slate-700 overflow-x-auto bg-slate-900 text-slate-100 font-semibold">
       {tabs.map((tab) => (
-
         <div
           key={tab.id}
-
-          onClick={() =>
-            setActiveTab(tab.id)
-          }
-
-          className={`
-            flex
-            items-center
-            gap-2
-            px-4
-            py-3
-            border-r
-            cursor-pointer
-            min-w-fit
-            transition
-            ${
-              activeTabId === tab.id
-                ? "bg-gray-500"
-                : "hover:bg-blue-500"
-            }
-          `}
+          onClick={() => setActiveTab(tab.id)}
+          className={`flex items-center gap-2 px-4 py-3 border-r border-slate-700 cursor-pointer transition ${
+            activeTabId === tab.id ? "bg-slate-800 text-white" : "hover:bg-slate-700"
+          }`}
         >
-
-          <span className="text-sm">
-            {tab.name}
-          </span>
-
+          <span className="text-sm truncate max-w-[120px]">{tab.name}</span>
           {tabs.length > 1 && (
-
             <button
               onClick={(e) => {
-
                 e.stopPropagation();
-
                 removeTab(tab.id);
               }}
-
-              className="
-                text-gray-600
-                hover:text-red-500
-              "
+              className="text-slate-400 hover:text-red-400"
             >
               ×
             </button>
-
           )}
-
         </div>
-
       ))}
-
       <button
         onClick={addTab}
-
-        className="
-          px-4
-          py-3
-          text-lg
-          hover:bg-gray-800
-        "
+        className="px-4 py-3 text-lg hover:bg-slate-800"
       >
         +
       </button>
-
     </div>
   );
 }

@@ -76,124 +76,42 @@ const response =
     response.data !== null;
 
   return (
-    <div className="
-      h-screen
-      overflow-auto
-      bg-white
-    ">
-
-      <div className="
-        p-4
-        border-b
-        flex
-        items-center
-        justify-between
-        sticky
-        top-0
-        bg-white
-        z-10
-      ">
-
-        <h2 className="
-          text-xl
-          font-bold
-        ">
-          Response
-        </h2>
-
-        <div className="flex gap-3">
-
-          {response.status && (
-
-            <div className={`
-              px-3
-              py-1
-              rounded
-              text-sm
-              font-medium
-              text-black
-              ${
-                response.status < 300
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-700"
-              }
-            `}>
-              {response.status}
-            </div>
-
-          )}
-
-          {response.time && (
-
-            <div className="
-              px-3
-              py-1
-              rounded
-              text-sm
-              bg-gray-300
-            ">
-              {response.time} ms
-            </div>
-
-          )}
-
-        </div>
-
-      </div>
-
-      <div className="p-4">
-
-        {isError ? (
-
-          <div className="
-            bg-red-50
-            border
-            border-red-200
-            text-red-700
-            p-4
-            rounded
-            whitespace-pre-wrap
-            text-sm
-          ">
-            {JSON.stringify(
-              response.error,
-              null,
-              2
+    <div className="min-h-full overflow-auto bg-slate-100 text-slate-950">
+      <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur-sm px-4 py-4 md:px-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-xl font-semibold">Response</h2>
+          <div className="flex flex-wrap gap-3">
+            {response.status && (
+              <div className={`px-3 py-1 rounded text-sm font-medium ${
+                response.status < 300 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"
+              }`}>
+                {response.status}
+              </div>
+            )}
+            {response.time && (
+              <div className="px-3 py-1 rounded text-sm bg-slate-200 text-slate-700">
+                {response.time} ms
+              </div>
             )}
           </div>
-
-        ) : isJsonObject ? (
-
-          <ReactJson
-            src={response.data}
-
-            collapsed={1}
-
-            displayDataTypes={false}
-
-            enableClipboard={true}
-
-            name={false}
-          />
-
-        ) : (
-
-          <pre className="
-            whitespace-pre-wrap
-            text-sm
-            bg-gray-50
-            p-4
-            rounded
-            border
-            overflow-auto
-          ">
-            {String(response.data)}
-          </pre>
-
-        )}
-
+        </div>
       </div>
 
+      <div className="p-4 md:p-6">
+        {isError ? (
+          <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl whitespace-pre-wrap text-sm shadow-sm">
+            {JSON.stringify(response.error, null, 2)}
+          </div>
+        ) : isJsonObject ? (
+          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <ReactJson src={response.data} collapsed={1} displayDataTypes={false} enableClipboard={true} name={false} />
+          </div>
+        ) : (
+          <pre className="whitespace-pre-wrap text-sm bg-white p-4 rounded-2xl border border-slate-200 overflow-auto shadow-sm">
+            {String(response.data)}
+          </pre>
+        )}
+      </div>
     </div>
   );
 }

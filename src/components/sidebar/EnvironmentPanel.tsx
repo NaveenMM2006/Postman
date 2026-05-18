@@ -31,84 +31,37 @@ export default function EnvironmentPanel() {
   }
 
   return (
-    <div className="border-t p-4">
-
-      <h2 className="font-bold mb-3">
-        Environment Variables
-      </h2>
-
-      <div className="space-y-2">
-
+    <div className="border-t border-slate-800 p-4">
+      <h2 className="font-semibold text-white mb-3">Environment Variables</h2>
+      <div className="grid gap-3">
         <input
           placeholder="KEY"
           value={key}
-          onChange={(e) =>
-            setKey(e.target.value)
-          }
-          className="
-            w-full
-            border
-            p-2
-            rounded
-          "
+          onChange={(e) => setKey(e.target.value)}
+          className="w-full border border-slate-700 bg-slate-900 text-white p-2 rounded"
         />
-
         <input
           placeholder="VALUE"
           value={value}
-          onChange={(e) =>
-            setValue(e.target.value)
-          }
-          className="
-            w-full
-            border
-            p-2
-            rounded
-          "
+          onChange={(e) => setValue(e.target.value)}
+          className="w-full border border-slate-700 bg-slate-900 text-white p-2 rounded"
         />
-
         <button
           onClick={addVariable}
-          className="
-            w-full
-            bg-black
-            text-white
-            p-2
-            rounded
-          "
+          className="w-full bg-emerald-500 text-slate-950 p-2 rounded font-semibold transition hover:bg-emerald-400"
         >
           Add Variable
         </button>
-
       </div>
 
-      <div className="mt-4 space-y-2">
-
-        {Object.entries(variables)
-          .map(([k, v]) => (
-
-            <div
-              key={k}
-              className="
-                border
-                rounded
-                p-2
-              "
-            >
-              <p className="font-medium">
-                {k}
-              </p>
-
-              <p className="text-sm text-gray-500 break-all">
-                {v}
-              </p>
-
-            </div>
-
+      <div className="mt-5 space-y-3">
+        {Object.entries(variables).map(([k, v]) => (
+          <div key={k} className="border border-slate-700 rounded-2xl p-3 bg-slate-900">
+            <p className="font-semibold text-white">{k}</p>
+            <p className="text-sm text-slate-400 break-all">{v}</p>
+          </div>
         ))}
-
       </div>
-
     </div>
   );
 }

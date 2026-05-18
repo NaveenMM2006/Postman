@@ -319,9 +319,10 @@ export default function RequestBuilder() {
     );
 
   if (!activeTab) {
-
     return null;
   }
+
+  const requestTab = activeTab;
 
   async function sendRequest() {
 
@@ -336,54 +337,46 @@ export default function RequestBuilder() {
       // PARSE HEADERS
 
       try {
-
         parsedHeaders = JSON.parse(
           parseVariables(
-            activeTab.headers || "{}",
+            requestTab.headers || "{}",
             variables
           )
         );
-
       } catch {
-
         alert(
           "Invalid Headers JSON"
         );
-
         setLoading(false);
-
         return;
       }
 
       // ADD AUTH HEADERS
 
       if (
-        activeTab.authType ===
+        requestTab.authType ===
         "bearer"
       ) {
-
         parsedHeaders[
           "Authorization"
-        ] = `Bearer ${activeTab.authValue}`;
+        ] = `Bearer ${requestTab.authValue}`;
       }
 
       if (
-        activeTab.authType ===
+        requestTab.authType ===
         "apikey"
       ) {
-
         parsedHeaders[
-          activeTab.authKey
-        ] = activeTab.authValue;
+          requestTab.authKey
+        ] = requestTab.authValue;
       }
 
       // PARSE BODY
 
       try {
-
         parsedBody = JSON.parse(
           parseVariables(
-            activeTab.body || "{}",
+            requestTab.body || "{}",
             variables
           )
         );
@@ -409,18 +402,18 @@ export default function RequestBuilder() {
           "/api/proxy",
           {
             method:
-              activeTab.method,
+              requestTab.method,
 
            url: (() => {
 
             const baseUrl =
               parseVariables(
-                activeTab.url,
+                requestTab.url,
                 variables
               );
 
             const query =
-              activeTab.queryParams
+              requestTab.queryParams
                 .filter(
                   (p) => p.key
                 )
@@ -452,18 +445,14 @@ export default function RequestBuilder() {
         Date.now();
 
       updateTab(
-        activeTab.id,
+        requestTab.id,
         {
           response: {
-
             success: true,
-
             status:
               response.status,
-
             time:
               endTime - startTime,
-
             data:
               response.data,
           },
@@ -474,9 +463,9 @@ export default function RequestBuilder() {
             "/api/history",
             {
               method:
-                activeTab.method,
+                requestTab.method,
 
-              url: activeTab.url,
+              url: requestTab.url,
 
               headers:
                 parsedHeaders,
@@ -494,12 +483,10 @@ export default function RequestBuilder() {
     } catch (error: any) {
 
       updateTab(
-        activeTab.id,
+        requestTab.id,
         {
           response: {
-
             success: false,
-
             error:
               error?.response?.data ||
               error.message,
@@ -514,39 +501,16 @@ export default function RequestBuilder() {
   }
 
   return (
-    <div className="
-      p-4
-      space-y-4
-      overflow-auto
-      h-screen
-    ">
-
-      {/* TOP BAR */}
-
-      <div className="
-        flex
-        gap-2
-      ">
-
+    <div className="p-4 space-y-5 overflow-auto min-h-full">
+      <div className="grid gap-3 md:grid-cols-[auto_1fr_auto] items-end">
         <select
           value={activeTab.method}
-
           onChange={(e) =>
-            updateTab(
-              activeTab.id,
-              {
-                method:
-                  e.target.value,
-              }
-            )
+            updateTab(activeTab.id, {
+              method: e.target.value,
+            })
           }
-
-          className="
-            border
-            p-2
-            rounded
-            w-32
-          "
+          className="border border-slate-600 bg-slate-900 text-white p-2 rounded w-full max-w-[140px]"
         >
           <option>GET</option>
           <option>POST</option>
@@ -557,136 +521,64 @@ export default function RequestBuilder() {
 
         <input
           value={activeTab.url}
-
           onChange={(e) =>
-            updateTab(
-              activeTab.id,
-              {
-                url:
-                  e.target.value,
-              }
-            )
+            updateTab(activeTab.id, {
+              url: e.target.value,
+            })
           }
-
-          placeholder="
-            https://api.example.com
-          "
-
-          className="
-            flex-1
-            border
-            p-2
-            rounded
-          "
+          placeholder="https://api.example.com"
+          className="w-full border border-slate-600 bg-slate-900 text-white p-2 rounded"
         />
 
         <button
           onClick={sendRequest}
-
           disabled={loading}
-
-          className="
-            bg-black
-            text-white
-            px-5
-            rounded
-            disabled:opacity-50
-          "
+          className="w-full md:w-auto bg-emerald-500 text-slate-950 px-5 py-2 rounded font-semibold transition disabled:opacity-50"
         >
-          {loading
-            ? "Sending..."
-            : "Send"}
+          {loading ? "Sending..." : "Send"}
         </button>
-
       </div>
-
-      {/* AUTH */}
 
       <AuthPanel />
-      <QueryParams/>
-      {/* HEADERS */}
+      <QueryParams />
 
-      <div>
-
-        <p className="
-          mb-2
-          font-medium
-        ">
-          Headers
-        </p>
-
+      <div className="border border-slate-700 rounded-2xl p-4 bg-slate-800 shadow-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="mb-1 text-white font-semibold">Headers</p>
+          <p className="text-xs text-slate-400">JSON format</p>
+        </div>
         <textarea
           value={activeTab.headers}
-
           onChange={(e) =>
-            updateTab(
-              activeTab.id,
-              {
-                headers:
-                  e.target.value,
-              }
-            )
+            updateTab(activeTab.id, {
+              headers: e.target.value,
+            })
           }
-
           placeholder='{
-  "Content-Type":
-  "application/json"
+  "Content-Type": "application/json"
 }'
-
-          className="
-            w-full
-            h-40
-            border
-            p-3
-            rounded
-            font-mono
-            text-sm
-          "
+          className="w-full min-h-[180px] border border-slate-600 bg-slate-900 text-white p-3 rounded font-mono text-sm"
         />
-
       </div>
 
-      {/* BODY */}
-
-      <div>
-
-        <p className="
-          mb-2
-          font-medium
-        ">
-          Body
-        </p>
-
+      <div className="border border-slate-700 rounded-2xl p-4 bg-slate-800 shadow-sm">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <p className="mb-1 text-white font-semibold">Body</p>
+          <p className="text-xs text-slate-400">JSON format</p>
+        </div>
         <textarea
           value={activeTab.body}
-
           onChange={(e) =>
-            updateTab(
-              activeTab.id,
-              {
-                body:
-                  e.target.value,
-              }
-            )
+            updateTab(activeTab.id, {
+              body: e.target.value,
+            })
           }
-
           placeholder='{
   "name": "John"
 }'
-
-          className="
-            w-full
-            h-72
-            border
-            p-3
-            rounded
-            font-mono
-            text-sm
-          "
+          className="w-full min-h-[260px] border border-slate-600 bg-slate-900 text-white p-3 rounded font-mono text-sm"
         />
-
       </div>
-
     </div>
   );
 }

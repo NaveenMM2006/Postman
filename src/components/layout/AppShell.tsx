@@ -8,61 +8,23 @@ export default function AppShell({
   children: ReactNode;
 }) {
   return (
-    <div className="
-      h-screen
-      bg-[#0f172a]
-      text-white
-      overflow-hidden
-      flex
-      flex-col
-    ">
-
-      {/* TOPBAR */}
-
-      <div className="
-        h-14
-        border-b
-        border-slate-700
-        flex
-        items-center
-        px-5
-        justify-between
-        bg-[#111827]
-      ">
-
+    <div className="min-h-screen w-full bg-slate-950 text-white overflow-hidden flex flex-col">
+      <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 bg-slate-900 shadow-sm">
         <div className="flex items-center gap-3">
-
-          <div className="
-            w-8
-            h-8
-            rounded-lg
-            bg-orange-500
-            flex
-            items-center
-            justify-center
-            font-bold
-          ">
+          <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center font-bold text-slate-950 shadow-sm">
             P
           </div>
-
           <div>
-            <h1 className="font-bold text-lg">
-              API Client
-            </h1>
+            <h1 className="font-semibold text-lg sm:text-xl">API Client</h1>
+            <p className="text-xs text-slate-400 sm:text-sm">Build and test APIs faster</p>
           </div>
-
         </div>
-
-        <div className="text-sm text-slate-400">
-          Next.js + MySQL
-        </div>
-
+        <div className="text-xs sm:text-sm text-slate-400 hidden sm:block">Next.js + MySQL</div>
       </div>
 
       <div className="flex-1 overflow-hidden">
         {children}
       </div>
-
     </div>
   );
 }
