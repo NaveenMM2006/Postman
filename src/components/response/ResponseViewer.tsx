@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import dynamic from "next/dynamic";
 
@@ -10,7 +13,6 @@ import {
 
 const ReactJson = dynamic(
   async () => {
-
     const mod =
       await import(
         "@microlink/react-json-view"
@@ -28,43 +30,68 @@ export default function ResponseViewer() {
   const [mounted, setMounted] =
     useState(false);
 
-const {
-  tabs,
-  activeTabId,
-} = useTabStore();
+  const {
+    tabs,
+    activeTabId,
+  } = useTabStore();
 
-const activeTab =
-  tabs.find(
-    (tab) =>
-      tab.id === activeTabId
-  );
+  const activeTab =
+    tabs.find(
+      (tab) =>
+        tab.id === activeTabId
+    );
 
-const response =
-  activeTab?.response;
+  const response =
+    activeTab?.response;
 
   useEffect(() => {
-
     setMounted(true);
-
   }, []);
 
   if (!mounted) {
-
     return null;
   }
 
   if (!response) {
 
     return (
+
       <div className="
-        h-screen
+        h-full
         flex
         items-center
         justify-center
-        text-gray-600
+        text-slate-500
       ">
-        No Response Yet
+
+        <div className="text-center">
+
+          <div className="
+            text-6xl
+            mb-4
+          ">
+            ⚡
+          </div>
+
+          <h2 className="
+            text-xl
+            font-semibold
+            text-slate-300
+          ">
+            No Response Yet
+          </h2>
+
+          <p className="
+            text-sm
+            mt-2
+          ">
+            Send a request to see response
+          </p>
+
+        </div>
+
       </div>
+
     );
   }
 
@@ -76,42 +103,153 @@ const response =
     response.data !== null;
 
   return (
-    <div className="min-h-full overflow-auto bg-slate-100 text-slate-950">
-      <div className="sticky top-0 z-10 border-b border-slate-200 bg-white/95 backdrop-blur-sm px-4 py-4 md:px-6">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-xl font-semibold">Response</h2>
-          <div className="flex flex-wrap gap-3">
+
+    <div className="
+      h-full
+      flex
+      flex-col
+      bg-[#111827]
+    ">
+
+      {/* HEADER */}
+
+      <div className="
+        sticky
+        top-0
+        z-10
+        px-6
+        py-4
+        border-b
+        border-slate-800
+        bg-[#111827]/95
+        backdrop-blur
+      ">
+
+        <div className="
+          flex
+          items-center
+          justify-between
+        ">
+
+          <h2 className="
+            text-lg
+            font-semibold
+          ">
+            Response
+          </h2>
+
+          <div className="
+            flex
+            items-center
+            gap-3
+          ">
+
             {response.status && (
-              <div className={`px-3 py-1 rounded text-sm font-medium ${
-                response.status < 300 ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700"
-              }`}>
+
+              <div className={`
+                px-3
+                py-1
+                rounded-full
+                text-sm
+                font-medium
+                ${
+                  response.status < 300
+                    ? "bg-emerald-500/20 text-emerald-400"
+                    : "bg-red-500/20 text-red-400"
+                }
+              `}>
                 {response.status}
               </div>
+
             )}
+
             {response.time && (
-              <div className="px-3 py-1 rounded text-sm bg-slate-200 text-slate-700">
+
+              <div className="
+                px-3
+                py-1
+                rounded-full
+                text-sm
+                bg-slate-800
+                text-slate-300
+              ">
                 {response.time} ms
               </div>
+
             )}
+
           </div>
+
         </div>
+
       </div>
 
-      <div className="p-4 md:p-6">
+      {/* BODY */}
+
+      <div className="
+        flex-1
+        overflow-auto
+        p-6
+      ">
+
         {isError ? (
-          <div className="bg-rose-50 border border-rose-200 text-rose-700 p-4 rounded-2xl whitespace-pre-wrap text-sm shadow-sm">
-            {JSON.stringify(response.error, null, 2)}
+
+          <div className="
+            bg-red-500/10
+            border
+            border-red-500/20
+            text-red-300
+            p-5
+            rounded-2xl
+            text-sm
+            whitespace-pre-wrap
+          ">
+            {JSON.stringify(
+              response.error,
+              null,
+              2
+            )}
           </div>
+
         ) : isJsonObject ? (
-          <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <ReactJson src={response.data} collapsed={1} displayDataTypes={false} enableClipboard={true} name={false} />
+
+          <div className="
+            rounded-2xl
+            overflow-hidden
+            border
+            border-slate-700
+          ">
+
+            <ReactJson
+              src={response.data}
+              collapsed={1}
+              displayDataTypes={false}
+              enableClipboard={true}
+              name={false}
+              theme="monokai"
+            />
+
           </div>
+
         ) : (
-          <pre className="whitespace-pre-wrap text-sm bg-white p-4 rounded-2xl border border-slate-200 overflow-auto shadow-sm">
+
+          <pre className="
+            text-sm
+            whitespace-pre-wrap
+            bg-slate-900
+            border
+            border-slate-700
+            p-5
+            rounded-2xl
+            overflow-auto
+          ">
             {String(response.data)}
           </pre>
+
         )}
+
       </div>
+
     </div>
   );
 }

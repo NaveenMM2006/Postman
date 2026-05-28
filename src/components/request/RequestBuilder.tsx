@@ -297,6 +297,7 @@ import {useEnvStore} from "@/store/envStore";
 import {parseVariables} from "@/lib/parseVariables";
 import AuthPanel from "./AuthPanel";
 import QueryParams from "./QueryParams";
+import SaveRequestModal from "./SaveRequestModal";
 
 export default function RequestBuilder() {
 
@@ -317,6 +318,8 @@ export default function RequestBuilder() {
       (tab) =>
         tab.id === activeTabId
     );
+  const [saveOpen, setSaveOpen] =
+  useState(false);
 
   if (!activeTab) {
     return null;
@@ -538,6 +541,21 @@ export default function RequestBuilder() {
           {loading ? "Sending..." : "Send"}
         </button>
       </div>
+      <button
+        onClick={() =>
+          setSaveOpen(true)
+        }
+
+        className="
+          bg-slate-700
+          text-white
+          px-5
+          py-2
+          rounded
+        "
+      >
+        Save
+      </button>
 
       <AuthPanel />
       <QueryParams />
@@ -579,6 +597,15 @@ export default function RequestBuilder() {
           className="w-full min-h-[260px] border border-slate-600 bg-slate-900 text-white p-3 rounded font-mono text-sm"
         />
       </div>
+      <SaveRequestModal
+        open={saveOpen}
+
+        onClose={() =>
+          setSaveOpen(false)
+        }
+
+        requestData={activeTab}
+      />
     </div>
   );
 }
