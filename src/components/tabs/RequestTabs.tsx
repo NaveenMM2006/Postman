@@ -9,6 +9,19 @@ import {
   useTabStore,
 } from "@/store/tabStore";
 
+import {
+  Plus,
+  X,
+} from "lucide-react";
+
+const METHOD_COLORS: Record<string, { bg: string; text: string }> = {
+  GET: { bg: "#0e639c", text: "#ffffff" },
+  POST: { bg: "#009000", text: "#ffffff" },
+  PUT: { bg: "#e8ab53", text: "#1e1e1e" },
+  PATCH: { bg: "#c586c0", text: "#ffffff" },
+  DELETE: { bg: "#cd3131", text: "#ffffff" },
+};
+
 export default function RequestTabs() {
 
   const [mounted, setMounted] =
@@ -36,87 +49,109 @@ export default function RequestTabs() {
       flex
       items-center
       overflow-x-auto
+      h-full
       scrollbar-thin
-      bg-[#111827]
-    ">
+      gap-1
+      px-2
+    " style={{ backgroundColor: "var(--vscode-bg)" }}>
 
-      {tabs.map((tab) => (
+      {tabs.map((tab) => {
+        const methodColor = METHOD_COLORS[tab.method] || METHOD_COLORS.GET;
 
-        <div
-          key={tab.id}
-          onClick={() =>
-            setActiveTab(tab.id)
-          }
-          className={`
-            flex
-            items-center
-            gap-3
-            px-5
-            py-3
-            border-r
-            border-slate-800
-            cursor-pointer
-            min-w-fit
-            transition-all
-            ${
-              activeTabId === tab.id
-                ? "bg-[#1e293b] text-white"
-                : "text-slate-400 hover:bg-slate-800"
+        return (
+          <div
+            key={tab.id}
+            onClick={() =>
+              setActiveTab(tab.id)
             }
-          `}
-        >
+            className="
+              flex
+              items-center
+              gap-2
+              px-3
+              py-2
+              rounded-t
+              cursor-pointer
+              min-w-fit
+              transition-all
+              group
+              border-b-2
+              flex-shrink-0
+            "
+            style={{
+              backgroundColor: activeTabId === tab.id ? "var(--vscode-bg-secondary)" : "transparent",
+              borderColor: activeTabId === tab.id ? methodColor.bg : "transparent",
+              color: activeTabId === tab.id ? "var(--vscode-text)" : "var(--vscode-text-muted)",
+            }}
+          >
 
-          <div className="
-            w-2
-            h-2
-            rounded-full
-            bg-orange-500
-          " />
-
-          <span className="
-            text-sm
-            font-medium
-            max-w-[140px]
-            truncate
-          ">
-            {tab.name}
-          </span>
-
-          {tabs.length > 1 && (
-
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                removeTab(tab.id);
-              }}
+            <span
               className="
-                text-slate-500
-                hover:text-red-400
-                text-lg
+                text-xs
+                font-bold
+                px-1.5
+                py-0.5
+                rounded
+                flex-shrink-0
               "
+              style={{
+                backgroundColor: methodColor.bg,
+                color: methodColor.text,
+              }}
             >
-              ×
-            </button>
+              {tab.method}
+            </span>
 
-          )}
+            <span className="
+              text-sm
+              font-medium
+              max-w-[120px]
+              truncate
+              flex-shrink
+            ">
+              {tab.name}
+            </span>
 
-        </div>
+            {tabs.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeTab(tab.id);
+                }}
+                className="
+                  text-xs
+                  opacity-0
+                  group-hover:opacity-100
+                  transition-opacity
+                  flex-shrink-0
+                  p-0.5
+                  rounded
+                  hover:bg-red-500/20
+                "
+                style={{ color: "var(--vscode-text-muted)" }}
+              >
+                <X size={14} />
+              </button>
+            )}
 
-      ))}
+          </div>
+        );
+      })}
 
       <button
         onClick={addTab}
         className="
-          px-5
-          py-3
-          text-slate-400
-          hover:bg-slate-800
-          hover:text-white
-          text-xl
-          transition
+          px-2
+          py-2
+          rounded
+          transition-colors
+          flex-shrink-0
+          hover:bg-slate-700
         "
+        style={{ color: "var(--vscode-text-muted)" }}
+        title="New Tab"
       >
-        +
+        <Plus size={16} />
       </button>
 
     </div>

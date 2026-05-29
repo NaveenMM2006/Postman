@@ -24,11 +24,10 @@ export default function WorkspacePage() {
 
         <div className="
           h-screen
-          bg-[#0b1220]
           text-white
           flex
           overflow-hidden
-        ">
+        " style={{ backgroundColor: "var(--vscode-bg)" }}>
 
           {/* LEFT SIDEBAR */}
 
@@ -37,11 +36,9 @@ export default function WorkspacePage() {
             lg:flex
             w-[300px]
             border-r
-            border-slate-800
-            bg-[#0f172a]
             overflow-hidden
             flex-col
-          ">
+          " style={{ borderColor: "var(--vscode-border)" }}>
             <CollectionSidebar />
           </aside>
 
@@ -58,10 +55,9 @@ export default function WorkspacePage() {
 
             <div className="
               border-b
-              border-slate-800
-              bg-[#111827]
               shrink-0
-            ">
+              h-11
+            " style={{ borderColor: "var(--vscode-border)" }}>
               <RequestTabs />
             </div>
 
@@ -79,10 +75,8 @@ export default function WorkspacePage() {
                 w-[50%]
                 min-w-0
                 border-r
-                border-slate-800
-                bg-[#0f172a]
                 overflow-auto
-              ">
+              " style={{ borderColor: "var(--vscode-border)" }}>
                 <RequestBuilder />
               </section>
 
@@ -91,7 +85,6 @@ export default function WorkspacePage() {
               <section className="
                 flex-1
                 min-w-0
-                bg-[#111827]
                 overflow-auto
               ">
                 <ResponseViewer />
@@ -108,11 +101,9 @@ export default function WorkspacePage() {
             xl:flex
             w-[320px]
             border-l
-            border-slate-800
-            bg-[#0f172a]
             overflow-hidden
             flex-col
-          ">
+          " style={{ borderColor: "var(--vscode-border)" }}>
             <HistorySidebar />
           </aside>
 

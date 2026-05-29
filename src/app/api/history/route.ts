@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import {
   saveHistory,
   getHistory,
+  deleteHistory,
 } from "@/services/history.service";
 
 export async function GET() {
@@ -29,7 +30,21 @@ export async function GET() {
     );
   }
 }
+export async function DELETE(req: Request) {
+  const url = new URL(req.url);
+  const id = url.searchParams.get("id");
 
+  if (!id) {
+    return NextResponse.json(
+      { error: "Missing history id" },
+      { status: 400 }
+    );
+  }
+
+  await deleteHistory(Number(id));
+
+  return NextResponse.json({ success: true });
+}
 export async function POST(
   req: Request
 ) {

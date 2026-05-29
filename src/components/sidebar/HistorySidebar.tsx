@@ -6,6 +6,15 @@ import {
 } from "react";
 
 import axios from "axios";
+import { Clock, Trash2 } from "lucide-react";
+
+const METHOD_COLORS: Record<string, string> = {
+  GET: "#0e639c",
+  POST: "#009000",
+  PUT: "#e8ab53",
+  PATCH: "#c586c0",
+  DELETE: "#cd3131",
+};
 
 export default function HistorySidebar() {
 
@@ -31,6 +40,24 @@ export default function HistorySidebar() {
     }
   }
 
+  async function deleteHistoryItem(
+    id: number
+  ) {
+    const confirmed = window.confirm(
+      "Delete this history entry?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    await axios.delete(
+      `/api/history?id=${id}`
+    );
+
+    loadHistory();
+  }
+
   useEffect(() => {
 
     loadHistory();
@@ -38,16 +65,105 @@ export default function HistorySidebar() {
   }, []);
 
   return (
-    <div className="w-full max-w-sm md:w-80 border-l border-slate-800 h-screen overflow-auto bg-slate-950 text-slate-100">
-      <div className="p-4 border-b border-slate-800 font-semibold text-lg">History</div>
-      <div className="space-y-2 p-4">
+    <div className="
+      w-full
+      max-w-sm
+      md:w-80
+      h-screen
+      overflow-auto
+      flex
+      flex-col
+      border-l
+    " style={{ backgroundColor: "var(--vscode-bg)", borderColor: "var(--vscode-border)" }}>
+      <div className="
+        p-4
+        border-b
+        font-semibold
+        text-sm
+        flex
+        items-center
+        gap-2
+        flex-shrink-0
+      " style={{ backgroundColor: "var(--vscode-bg-secondary)", borderColor: "var(--vscode-border)", color: "var(--vscode-text)" }}>
+        <Clock size={14} />
+        History
+      </div>
+      <div className="
+        space-y-2
+        p-4
+        flex-1
+        overflow-auto
+      ">
         {history.map((item) => (
-          <div key={item.id} className="rounded-2xl border border-slate-800 bg-slate-900 p-3 transition hover:bg-slate-800 cursor-pointer">
-            <div className="flex flex-wrap items-center gap-2 mb-2 text-xs text-slate-400">
-              <span className="rounded-full bg-slate-700 px-2 py-1 font-semibold text-slate-100">{item.method}</span>
-              <span>{item.status}</span>
+          <div
+            key={item.id}
+            className="
+              rounded
+              border
+              p-3
+              transition-colors
+              hover:bg-opacity-50
+              cursor-pointer
+            "
+            style={{
+              backgroundColor: "var(--vscode-bg-secondary)",
+              borderColor: "var(--vscode-border)",
+              color: "var(--vscode-text)",
+            }}
+          >
+            <div className="
+              flex
+              flex-wrap
+              items-center
+              gap-2
+              mb-2
+              text-xs
+              justify-between
+            ">
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  className="
+                    rounded
+                    px-2
+                    py-1
+                    font-semibold
+                    text-white
+                  "
+                  style={{
+                    backgroundColor: METHOD_COLORS[item.method] || METHOD_COLORS.GET,
+                  }}
+                >
+                  {item.method}
+                </span>
+                <span
+                  style={{ color: "var(--vscode-text-muted)" }}
+                >
+                  {item.status}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => deleteHistoryItem(item.id)}
+                className="
+                  p-1
+                  rounded
+                  text-red-400
+                  hover:bg-white/10
+                  transition-colors
+                "
+                style={{
+                  backgroundColor: "transparent",
+                }}
+              >
+                <Trash2 size={14} />
+              </button>
             </div>
-            <p className="text-sm truncate text-slate-200">{item.url}</p>
+            <p className="
+              text-xs
+              truncate
+            " style={{ color: "var(--vscode-text-muted)" }}>
+              {item.url}
+            </p>
           </div>
         ))}
       </div>

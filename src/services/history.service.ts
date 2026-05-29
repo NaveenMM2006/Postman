@@ -50,3 +50,15 @@ export async function getHistory() {
 
   return rows;
 }
+
+export async function deleteHistory(
+  id: number
+) {
+  await db.query(
+    `
+    DELETE FROM request_history
+    WHERE id = ?
+    `,
+    [id]
+  );
+}

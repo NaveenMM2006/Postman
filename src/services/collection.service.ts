@@ -116,3 +116,23 @@ export async function getRequests(
 
   return rows;
 }
+
+export async function deleteCollection(
+  id: number
+) {
+  await db.query(
+    `
+    DELETE FROM saved_requests
+    WHERE collection_id = ?
+    `,
+    [id]
+  );
+
+  await db.query(
+    `
+    DELETE FROM collections
+    WHERE id = ?
+    `,
+    [id]
+  );
+}

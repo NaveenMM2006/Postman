@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import { Send } from "lucide-react";
 
 export default function AppShell({
   children,
@@ -8,19 +9,18 @@ export default function AppShell({
   children: ReactNode;
 }) {
   return (
-    <div className="min-h-screen w-full bg-slate-950 text-white overflow-hidden flex flex-col">
-      <div className="h-16 border-b border-slate-800 flex items-center justify-between px-4 sm:px-6 bg-slate-900 shadow-sm">
+    <div className="min-h-screen w-full overflow-hidden flex flex-col" style={{ backgroundColor: "var(--vscode-bg)" }}>
+      <header className="h-14 border-b flex items-center justify-between px-4 sm:px-6" style={{ borderColor: "var(--vscode-border)", backgroundColor: "var(--vscode-bg-secondary)" }}>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center font-bold text-slate-950 shadow-sm">
-            P
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white" style={{ backgroundColor: "var(--vscode-accent)" }}>
+            <Send size={18} strokeWidth={2.5} />
           </div>
           <div>
-            <h1 className="font-semibold text-lg sm:text-xl">API Client</h1>
-            <p className="text-xs text-slate-400 sm:text-sm">Build and test APIs faster</p>
+            <h1 className="font-semibold text-base sm:text-lg" style={{ color: "var(--vscode-text)" }}>API Client</h1>
           </div>
         </div>
-        <div className="text-xs sm:text-sm text-slate-400 hidden sm:block">Next.js + MySQL</div>
-      </div>
+        <div className="text-xs sm:text-sm hidden sm:block" style={{ color: "var(--vscode-text-muted)" }}>REST API Testing Suite</div>
+      </header>
 
       <div className="flex-1 overflow-hidden">
         {children}

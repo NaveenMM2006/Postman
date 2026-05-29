@@ -4,6 +4,11 @@ import {
   useTabStore,
 } from "@/store/tabStore";
 
+import {
+  X,
+  Plus,
+} from "lucide-react";
+
 export default function QueryParams() {
 
   const {
@@ -80,37 +85,57 @@ export default function QueryParams() {
   }
 
   return (
-    <div className="border border-slate-700 rounded-2xl p-4 space-y-4 bg-slate-800 shadow-sm">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="font-semibold text-lg text-white">Query Params</h2>
+    <div className="rounded p-4 space-y-3" style={{ backgroundColor: "var(--vscode-bg-secondary)", border: `1px solid var(--vscode-border)` }}>
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="font-semibold text-sm" style={{ color: "var(--vscode-text)" }}>Query Params</h2>
         <button
           onClick={addParam}
-          className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+          className="inline-flex items-center justify-center rounded px-2 py-1 text-xs font-medium transition hover:bg-opacity-80"
+          style={{
+            backgroundColor: "var(--vscode-accent)",
+            color: "#ffffff",
+          }}
         >
+          <Plus size={14} />
           Add
         </button>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {queryParams.map((param, index) => (
-          <div key={index} className="grid gap-2 sm:grid-cols-[1fr_1fr_auto] items-end">
+          <div key={index} className="grid gap-2 sm:grid-cols-[1fr_1fr_auto] items-center">
             <input
               placeholder="Key"
               value={param.key}
               onChange={(e) => updateParam(index, "key", e.target.value)}
-              className="w-full border border-slate-600 bg-slate-900 text-white p-2 rounded"
+              className="w-full px-3 py-1.5 rounded text-sm"
+              style={{
+                backgroundColor: "var(--vscode-bg)",
+                color: "var(--vscode-text)",
+                border: `1px solid var(--vscode-border)`,
+              }}
             />
             <input
               placeholder="Value"
               value={param.value}
               onChange={(e) => updateParam(index, "value", e.target.value)}
-              className="w-full border border-slate-600 bg-slate-900 text-white p-2 rounded"
+              className="w-full px-3 py-1.5 rounded text-sm"
+              style={{
+                backgroundColor: "var(--vscode-bg)",
+                color: "var(--vscode-text)",
+                border: `1px solid var(--vscode-border)`,
+              }}
             />
             <button
               onClick={() => removeParam(index)}
-              className="h-10 rounded-full border border-red-500 text-red-400 hover:bg-red-500/10"
+              className="px-2 py-1.5 rounded transition hover:opacity-80"
+              style={{
+                backgroundColor: "rgba(205, 49, 49, 0.1)",
+                color: "#cd3131",
+                border: `1px solid rgba(205, 49, 49, 0.3)`,
+              }}
             >
-              ×
+              <X size={14} />
             </button>
           </div>
         ))}

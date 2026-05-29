@@ -61,8 +61,7 @@ export default function ResponseViewer() {
         flex
         items-center
         justify-center
-        text-slate-500
-      ">
+      " style={{ backgroundColor: "var(--vscode-bg)", color: "var(--vscode-text-muted)" }}>
 
         <div className="text-center">
 
@@ -74,15 +73,14 @@ export default function ResponseViewer() {
           </div>
 
           <h2 className="
-            text-xl
+            text-lg
             font-semibold
-            text-slate-300
-          ">
+          " style={{ color: "var(--vscode-text)" }}>
             No Response Yet
           </h2>
 
           <p className="
-            text-sm
+            text-xs
             mt-2
           ">
             Send a request to see response
@@ -108,8 +106,7 @@ export default function ResponseViewer() {
       h-full
       flex
       flex-col
-      bg-[#111827]
-    ">
+    " style={{ backgroundColor: "var(--vscode-bg)" }}>
 
       {/* HEADER */}
 
@@ -117,13 +114,10 @@ export default function ResponseViewer() {
         sticky
         top-0
         z-10
-        px-6
-        py-4
+        px-4
+        py-3
         border-b
-        border-slate-800
-        bg-[#111827]/95
-        backdrop-blur
-      ">
+      " style={{ backgroundColor: "var(--vscode-bg-secondary)", borderColor: "var(--vscode-border)" }}>
 
         <div className="
           flex
@@ -132,32 +126,30 @@ export default function ResponseViewer() {
         ">
 
           <h2 className="
-            text-lg
+            text-sm
             font-semibold
-          ">
+          " style={{ color: "var(--vscode-text)" }}>
             Response
           </h2>
 
           <div className="
             flex
             items-center
-            gap-3
+            gap-2
           ">
 
             {response.status && (
 
-              <div className={`
+              <div className="
                 px-3
                 py-1
-                rounded-full
-                text-sm
+                rounded
+                text-xs
                 font-medium
-                ${
-                  response.status < 300
-                    ? "bg-emerald-500/20 text-emerald-400"
-                    : "bg-red-500/20 text-red-400"
-                }
-              `}>
+              " style={{
+                backgroundColor: response.status < 300 ? "rgba(0, 144, 0, 0.2)" : "rgba(205, 49, 49, 0.2)",
+                color: response.status < 300 ? "#00c000" : "#ff6b6b"
+              }}>
                 {response.status}
               </div>
 
@@ -168,12 +160,14 @@ export default function ResponseViewer() {
               <div className="
                 px-3
                 py-1
-                rounded-full
-                text-sm
-                bg-slate-800
-                text-slate-300
-              ">
-                {response.time} ms
+                rounded
+                text-xs
+              " style={{
+                backgroundColor: "var(--vscode-bg)",
+                color: "var(--vscode-text-muted)",
+                border: `1px solid var(--vscode-border)`
+              }}>
+                {response.time}ms
               </div>
 
             )}
@@ -189,21 +183,22 @@ export default function ResponseViewer() {
       <div className="
         flex-1
         overflow-auto
-        p-6
+        p-4
       ">
 
         {isError ? (
 
           <div className="
-            bg-red-500/10
-            border
-            border-red-500/20
-            text-red-300
-            p-5
-            rounded-2xl
-            text-sm
+            p-4
+            rounded
+            text-xs
             whitespace-pre-wrap
-          ">
+            font-mono
+          " style={{
+            backgroundColor: "rgba(205, 49, 49, 0.1)",
+            color: "#ff6b6b",
+            border: `1px solid rgba(205, 49, 49, 0.3)`
+          }}>
             {JSON.stringify(
               response.error,
               null,
@@ -214,11 +209,12 @@ export default function ResponseViewer() {
         ) : isJsonObject ? (
 
           <div className="
-            rounded-2xl
+            rounded
             overflow-hidden
             border
-            border-slate-700
-          ">
+          " style={{
+            borderColor: "var(--vscode-border)"
+          }}>
 
             <ReactJson
               src={response.data}
@@ -234,15 +230,17 @@ export default function ResponseViewer() {
         ) : (
 
           <pre className="
-            text-sm
+            text-xs
             whitespace-pre-wrap
-            bg-slate-900
-            border
-            border-slate-700
-            p-5
-            rounded-2xl
+            p-4
+            rounded
             overflow-auto
-          ">
+            font-mono
+          " style={{
+            backgroundColor: "var(--vscode-bg-secondary)",
+            color: "var(--vscode-text)",
+            border: `1px solid var(--vscode-border)`
+          }}>
             {String(response.data)}
           </pre>
 

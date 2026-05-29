@@ -43,10 +43,10 @@ export default function AuthPanel() {
   }
 
   return (
-    <div className="border border-slate-700 rounded-2xl p-4 space-y-4 bg-slate-800 shadow-sm">
+    <div className="rounded p-4 space-y-3" style={{ backgroundColor: "var(--vscode-bg-secondary)", border: `1px solid var(--vscode-border)` }}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="font-semibold text-lg text-white">Authorization</h2>
-        <p className="text-sm text-slate-400">Set auth headers for this request</p>
+        <h2 className="font-semibold text-sm" style={{ color: "var(--vscode-text)" }}>Authorization</h2>
+        <p className="text-xs" style={{ color: "var(--vscode-text-muted)" }}>Set auth headers for this request</p>
       </div>
 
       <select
@@ -56,7 +56,12 @@ export default function AuthPanel() {
             authType: e.target.value,
           })
         }
-        className="border border-slate-600 bg-slate-900 text-white p-2 rounded w-full"
+        className="px-3 py-2 rounded w-full text-sm"
+        style={{
+          backgroundColor: "var(--vscode-bg)",
+          color: "var(--vscode-text)",
+          border: `1px solid var(--vscode-border)`,
+        }}
       >
         <option value="none">No Auth</option>
         <option value="bearer">Bearer Token</option>
@@ -72,12 +77,17 @@ export default function AuthPanel() {
               authValue: e.target.value,
             })
           }
-          className="border border-slate-600 bg-slate-900 text-white p-2 rounded w-full"
+          className="px-3 py-2 rounded w-full text-sm"
+          style={{
+            backgroundColor: "var(--vscode-bg)",
+            color: "var(--vscode-text)",
+            border: `1px solid var(--vscode-border)`,
+          }}
         />
       )}
 
       {activeTab.authType === "apikey" && (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-2 sm:grid-cols-2">
           <input
             placeholder="Header Key"
             value={activeTab.authKey}
@@ -86,7 +96,12 @@ export default function AuthPanel() {
                 authKey: e.target.value,
               })
             }
-            className="border border-slate-600 bg-slate-900 text-white p-2 rounded w-full"
+            className="px-3 py-2 rounded w-full text-sm"
+            style={{
+              backgroundColor: "var(--vscode-bg)",
+              color: "var(--vscode-text)",
+              border: `1px solid var(--vscode-border)`,
+            }}
           />
 
           <input
@@ -97,7 +112,12 @@ export default function AuthPanel() {
                 authValue: e.target.value,
               })
             }
-            className="border border-slate-600 bg-slate-900 text-white p-2 rounded w-full"
+            className="px-3 py-2 rounded w-full text-sm"
+            style={{
+              backgroundColor: "var(--vscode-bg)",
+              color: "var(--vscode-text)",
+              border: `1px solid var(--vscode-border)`,
+            }}
           />
         </div>
       )}
