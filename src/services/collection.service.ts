@@ -1,24 +1,3 @@
-// import db from "@/lib/db";
-
-// export async function getCollections() { 
-//     const [rows] = await db.query(
-//         "SELECT * FROM collections ORDER BY created_at DESC"
-//     );
-
-//     return rows;
-// }
-
-// export async function createCollection(name: string) {
-//     const [result]: any = await db.query(
-//         "INSERT INTO collections(name) VALUES(?)",
-//         [name]
-//     );
-
-//     return {
-//         id: result.insertId,
-//         name,
-//     };
-// }
 import db from "@/lib/db";
 
 export async function getCollections() {
@@ -135,4 +114,20 @@ export async function deleteCollection(
     `,
     [id]
   );
+}
+
+export async function getCollectionRequests(
+  collectionId: number
+) {
+  const [rows] = await db.query(
+    `
+    SELECT *
+    FROM saved_requests
+    WHERE collection_id = ?
+    ORDER BY created_at ASC
+    `,
+    [collectionId]
+  );
+
+  return rows;
 }

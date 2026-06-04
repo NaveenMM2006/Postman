@@ -38,6 +38,14 @@ export default function CollectionsSidebar() {
 
   const [openCollection, setOpenCollection] =
     useState<number | null>(null);
+  
+  const [runningCollection,
+  setRunningCollection] =
+  useState<number | null>(null);
+
+  const [runnerResults,
+  setRunnerResults] =
+  useState<any>({});
 
   const {
     activeTabId,
@@ -86,6 +94,43 @@ export default function CollectionsSidebar() {
     );
   }
 
+  async function runCollection(
+  collectionId: number
+) {
+
+  try {
+
+    setRunningCollection(
+      collectionId
+    );
+
+    const response =
+      await axios.post(
+        "/api/runner",
+        {
+          collectionId,
+        }
+      );
+
+    setRunnerResults(
+      (prev: any) => ({
+        ...prev,
+        [collectionId]:
+          response.data.results,
+      })
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+  } finally {
+
+    setRunningCollection(
+      null
+    );
+  }
+}
   async function createCollection() {
 
     if (!newCollection.trim()) {
@@ -358,12 +403,44 @@ export default function CollectionsSidebar() {
             {openCollection ===
               collection.id && (
 
-              <div className="
-                pl-4
-                pr-2
-                pb-2
-                space-y-1
-              ">
+              
+
+              <div
+                className="
+                  pl-4
+                  pr-2
+                  pb-2
+                  space-y-1
+                "
+              >
+
+                <div className="px-2 py-2">
+
+                  <button
+                    onClick={() =>
+                      runCollection(
+                        collection.id
+                      )
+                    }
+                    className="
+                      w-full
+                      bg-green-600
+                      hover:bg-green-500
+                      text-white
+                      text-xs
+                      py-2
+                      rounded
+                    "
+                  >
+                    {
+                      runningCollection ===
+                      collection.id
+                        ? "Running..."
+                        : "▶ Run Collection"
+                    }
+                  </button>
+
+                  </div>
 
                 {requests[
                   collection.id
@@ -427,6 +504,72 @@ export default function CollectionsSidebar() {
 
                 ))}
 
+                {
+  runnerResults[
+    collection.id
+  ]?.length > 0 && (
+
+    <div
+      className="
+        mt-3
+        border-t
+        border-slate-700
+        pt-2
+      "
+    >
+
+      <p
+        className="
+          text-xs
+          text-slate-400
+          px-3
+          mb-2
+        "
+      >
+        Last Run
+      </p>
+
+      {runnerResults[
+        collection.id
+      ].map((result: any) => (
+
+        <div
+          key={result.id}
+          className="
+            flex
+            justify-between
+            items-center
+            px-3
+            py-1
+            text-xs
+          "
+        >
+
+          <span>
+            {result.name}
+          </span>
+
+          <span
+            className={
+              result.success
+                ? "text-green-400"
+                : "text-red-400"
+            }
+          >
+            {
+              result.success
+                ? "✓"
+                : "✗"
+            }
+          </span>
+
+        </div>
+
+      ))}
+
+    </div>
+
+)}
               </div>
 
             )}
