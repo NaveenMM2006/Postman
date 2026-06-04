@@ -62,7 +62,6 @@ import { NextResponse } from "next/server";
 export async function POST(
   req: Request
 ) {
-
   try {
 
     const body =
@@ -80,8 +79,7 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          error:
-            "URL is required",
+          error: "URL is required",
         },
         {
           status: 400,
@@ -89,13 +87,15 @@ export async function POST(
       );
     }
 
-    let parsedHeaders = {};
+    let parsedHeaders: Record<
+      string,
+      string
+    > = {};
 
     try {
 
       parsedHeaders =
-        typeof headers ===
-        "string"
+        typeof headers === "string"
           ? headers.trim()
             ? JSON.parse(headers)
             : {}
@@ -143,6 +143,36 @@ export async function POST(
       );
     }
 
+    const finalHeaders = {
+      "Content-Type":
+        "application/json",
+      ...parsedHeaders,
+    };
+
+    console.log(
+      "========== API REQUEST =========="
+    );
+
+    console.log(
+      "URL:",
+      url
+    );
+
+    console.log(
+      "METHOD:",
+      method
+    );
+
+    console.log(
+      "HEADERS:",
+      finalHeaders
+    );
+
+    console.log(
+      "BODY:",
+      parsedBody
+    );
+
     const startTime =
       Date.now();
 
@@ -151,7 +181,7 @@ export async function POST(
         method,
 
         headers:
-          parsedHeaders,
+          finalHeaders,
 
         body:
           method !== "GET"
@@ -205,11 +235,17 @@ export async function POST(
 
   } catch (error: any) {
 
+    console.error(
+      "PROXY ERROR:",
+      error
+    );
+
     return NextResponse.json(
       {
         success: false,
         error:
-          error.message,
+          error.message ||
+          "Unknown Error",
       },
       {
         status: 500,

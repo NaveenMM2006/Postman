@@ -6,7 +6,7 @@ import {
 } from "react";
 
 import axios from "axios";
-import { Clock, Trash2 } from "lucide-react";
+import { Clock, Trash2, Check } from "lucide-react";
 
 const METHOD_COLORS: Record<string, string> = {
   GET: "#0e639c",
@@ -20,6 +20,9 @@ export default function HistorySidebar() {
 
   const [history, setHistory] =
     useState<any[]>([]);
+
+  const [selectedItems, setSelectedItems] =
+    useState<Set<number>>(new Set());
 
   async function loadHistory() {
 
@@ -40,6 +43,26 @@ export default function HistorySidebar() {
     }
   }
 
+  function toggleSelectItem(id: number) {
+    const newSelected = new Set(selectedItems);
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
+    }
+    setSelectedItems(newSelected);
+  }
+
+  function toggleSelectAll() {
+    if (selectedItems.size === history.length) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(
+        new Set(history.map((item) => item.id))
+      );
+    }
+  }
+
   async function deleteHistoryItem(
     id: number
   ) {
@@ -56,6 +79,34 @@ export default function HistorySidebar() {
     );
 
     loadHistory();
+  }
+
+  async function deleteSelectedItems() {
+    if (selectedItems.size === 0) {
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `Delete ${selectedItems.size} history ${
+        selectedItems.size === 1 ? "entry" : "entries"
+      }?`
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await Promise.all(
+        Array.from(selectedItems).map((id) =>
+          axios.delete(`/api/history?id=${id}`)
+        )
+      );
+      setSelectedItems(new Set());
+      loadHistory();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   useEffect(() => {
@@ -84,9 +135,33 @@ export default function HistorySidebar() {
         items-center
         gap-2
         flex-shrink-0
+        justify-between
       " style={{ backgroundColor: "var(--vscode-bg-secondary)", borderColor: "var(--vscode-border)", color: "var(--vscode-text)" }}>
-        <Clock size={14} />
-        History
+        <div className="flex items-center gap-2">
+          <Clock size={14} />
+          History
+        </div>
+        {selectedItems.size > 0 && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs">
+              {selectedItems.size} selected
+            </span>
+            <button
+              type="button"
+              onClick={deleteSelectedItems}
+              className="
+                p-1
+                rounded
+                text-red-400
+                hover:bg-white/10
+                transition-colors
+              "
+              title="Delete selected items"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        )}
       </div>
       <div className="
         space-y-2
@@ -106,8 +181,12 @@ export default function HistorySidebar() {
               cursor-pointer
             "
             style={{
-              backgroundColor: "var(--vscode-bg-secondary)",
-              borderColor: "var(--vscode-border)",
+              backgroundColor: selectedItems.has(item.id)
+                ? "rgba(33, 150, 243, 0.2)"
+                : "var(--vscode-bg-secondary)",
+              borderColor: selectedItems.has(item.id)
+                ? "rgb(33, 150, 243)"
+                : "var(--vscode-border)",
               color: "var(--vscode-text)",
             }}
           >
@@ -121,6 +200,30 @@ export default function HistorySidebar() {
               justify-between
             ">
               <div className="flex flex-wrap items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => toggleSelectItem(item.id)}
+                  className="
+                    p-1
+                    rounded
+                    transition-colors
+                    flex-shrink-0
+                  "
+                  style={{
+                    color: selectedItems.has(item.id)
+                      ? "rgb(33, 150, 243)"
+                      : "var(--vscode-text-muted)",
+                  }}
+                >
+                  <Check
+                    size={16}
+                    fill={
+                      selectedItems.has(item.id)
+                        ? "currentColor"
+                        : "none"
+                    }
+                  />
+                </button>
                 <span
                   className="
                     rounded
