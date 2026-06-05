@@ -528,26 +528,98 @@ export default function CollectionsSidebar() {
       >
         Last Run
       </p>
+      <div
+  className="
+    flex
+    justify-between
+    text-xs
+    px-3
+    py-2
+    bg-slate-900
+    rounded
+    mb-2
+  "
+>
+
+  <span>
+    Total:
+    {
+      runnerResults[
+        collection.id
+      ]?.length
+    }
+  </span>
+
+  <span className="text-green-400">
+    Passed:
+    {
+      runnerResults[
+        collection.id
+      ]?.filter(
+        (r: any) => r.success
+      ).length
+    }
+  </span>
+
+  <span className="text-red-400">
+    Failed:
+    {
+      runnerResults[
+        collection.id
+      ]?.filter(
+        (r: any) => !r.success
+      ).length
+    }
+  </span>
+
+</div>
 
       {runnerResults[
-        collection.id
-      ].map((result: any) => (
+      collection.id
+    ]?.map((result: any, index: number) => (
 
-        <div
-          key={result.id}
-          className="
-            flex
-            justify-between
-            items-center
-            px-3
-            py-1
-            text-xs
-          "
-        >
+      <div
+        key={index}
+        className="
+          flex
+          items-center
+          justify-between
+          px-3
+          py-2
+          text-xs
+          border-b
+          border-slate-800
+        "
+      >
 
-          <span>
+        <div className="flex flex-col">
+
+          <span
+            className="
+              text-white
+              font-medium
+            "
+          >
             {result.name}
           </span>
+
+          <span
+            className="
+              text-slate-500
+            "
+          >
+            {result.method}
+          </span>
+
+        </div>
+
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+          "
+        >
 
           <span
             className={
@@ -556,16 +628,22 @@ export default function CollectionsSidebar() {
                 : "text-red-400"
             }
           >
-            {
-              result.success
-                ? "✓"
-                : "✗"
-            }
+            {result.status}
+          </span>
+
+          <span
+            className="
+              text-slate-400
+            "
+          >
+            {result.time}ms
           </span>
 
         </div>
 
-      ))}
+      </div>
+
+    ))}
 
     </div>
 
